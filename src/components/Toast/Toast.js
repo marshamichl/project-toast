@@ -19,20 +19,6 @@ const ICONS_BY_VARIANT = {
 };
 
 function Toast({ variant, handleDismiss, children }) {
-	React.useEffect(() => {
-		function handleKeyDown(event) {
-			if (event.code === 'Escape') {
-				handleDismiss();
-			}
-		}
-
-		window.addEventListener('keydown', handleKeyDown);
-
-		return () => {
-			window.removeEventListener('keydown', handleKeyDown);
-		};
-	}, [handleDismiss]);
-
 	const className = `${styles.toast} ${styles[variant]}`;
 
 	const Icon = ICONS_BY_VARIANT[variant];
