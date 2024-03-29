@@ -31,6 +31,13 @@ function ToastPlayground() {
 		setSelectedVariant(VARIANT_OPTIONS[0]);
 	}
 
+	function handleDismissToast(id) {
+		const newToastList = toastMessages.filter(
+			(toast) => toast.id !== id
+		);
+		setToastMessages(newToastList);
+	}
+
 	return (
 		<div className={styles.wrapper}>
 			<header>
@@ -39,7 +46,7 @@ function ToastPlayground() {
 
 			<ToastShelf
 				toasts={toastMessages}
-				setToastMessages={setToastMessages}
+				handleDismiss={handleDismissToast}
 			/>
 
 			<form
