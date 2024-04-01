@@ -4,38 +4,27 @@ import Button from '../Button';
 import ToastShelf from '../ToastShelf';
 
 import styles from './ToastPlayground.module.css';
+import { ToastContext } from '../ToastProvider';
 
 const VARIANT_OPTIONS = ['notice', 'warning', 'success', 'error'];
 
 function ToastPlayground() {
+	const { createToast } = React.useContext(ToastContext);
 	const [message, setMessage] = React.useState('');
-	const [selectedVariant, setSelectedVariant] = React.useState(
-		VARIANT_OPTIONS[0]
-	);
-
-	const [toastMessages, setToastMessages] = React.useState([]);
+	const [variant, setVariant] = React.useState(VARIANT_OPTIONS[0]);
 
 	function handleSubmit() {
 		if (!message) {
 			return;
 		}
 
-		const newToast = {
-			id: crypto.randomUUID(),
+		createToast({
 			message,
-			variant: selectedVariant,
-		};
+			variant,
+		});
 
-		setToastMessages([...toastMessages, newToast]);
 		setMessage('');
-		setSelectedVariant(VARIANT_OPTIONS[0]);
-	}
-
-	function handleDismissToast(id) {
-		const newToastList = toastMessages.filter(
-			(toast) => toast.id !== id
-		);
-		setToastMessages(newToastList);
+		setVariant(VARIANT_OPTIONS[0]);
 	}
 
 	return (
@@ -44,10 +33,7 @@ function ToastPlayground() {
 				<img alt="Cute toast mascot" src="/toast.png" />
 			</header>
 
-			<ToastShelf
-				toasts={toastMessages}
-				handleDismiss={handleDismissToast}
-			/>
+			<ToastShelf />
 
 			<form
 				onSubmit={(event) => {
@@ -81,19 +67,19 @@ function ToastPlayground() {
 					<div
 						className={`${styles.inputWrapper} ${styles.radioWrapper}`}
 					>
-						{VARIANT_OPTIONS.map((variant) => (
-							<label key={variant} htmlFor={`variant-${variant}`}>
+						{VARIANT_OPTIONS.map((option) => (
+							<label key={option} htmlFor={`variant-${option}`}>
 								<input
-									id={`variant-${variant}`}
+									id={`variant-${option}`}
 									type="radio"
 									name="variant"
-									value={variant}
-									checked={variant === selectedVariant}
+									value={option}
+									checked={option === variant}
 									onChange={(event) => {
-										setSelectedVariant(event.target.value);
+										setVariant(event.target.value);
 									}}
 								/>
-								{variant}
+								{option}
 							</label>
 						))}
 					</div>
